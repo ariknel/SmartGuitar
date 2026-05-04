@@ -174,12 +174,14 @@ The ESP32-S3's **LX7 PIE vector extension** accelerates FIR convolution and biqu
 - **Reverb (convolution)** — 512-tap IR, load custom impulse responses via web UI
 - **Cabinet IR simulation** — 512-tap FIR, multiple cabinet models
 
-### Looper
-- **60 seconds mono** or **30 seconds stereo** at 44.1kHz/16-bit
-- Full loop buffer lives in PSRAM (5.3MB)
-- Overdub, undo, playback controls via record button and web UI
+### Looper *(v3 OTA)*
+- Loop audio streamed directly to/from SD card — no PSRAM consumed, no RAM constraint
+- Loop length limited only by SD card space (1GB SD ≈ 3 hours at 44.1kHz/16-bit mono)
+- Overdub, undo, stop controls
+- Controlled via **JST-SH expansion header (J6)** — wire a momentary button anywhere on the guitar body (near knobs, upper bout, strap button), or plug a standard footswitch pedal into **3.5mm jack (J7)** for hands-free operation on stage
+- All hardware present from v1 — no PCB modification needed when v3 firmware ships
 
-> **All DSP effects are v1 hardware-ready.** The PCB, module, and memory are sufficient for the full effects chain from day one. Effects are a firmware matter — ship what works in v1, enable more in subsequent OTA updates.
+> **All DSP effects and looper hardware are v1 PCB-ready.** Everything is a firmware matter — ship what is stable in v1, unlock more via OTA updates.
 
 ---
 
@@ -463,9 +465,21 @@ smartguitar/
 - [ ] DSP: cabinet IR simulation
 
 ### v3 — Looper OTA
-- [ ] Looper: 60s mono / 30s stereo
-- [ ] Looper: overdub, undo, sync to tempo
+> The PCB includes all hardware for the looper from v1 — JST-SH expansion header (J6) and 3.5mm footswitch jack (J7) are populated on the board. No hardware change needed when v3 firmware ships.
+
+- [ ] Looper firmware: SD-backed loop recording (no PSRAM consumed; loop length limited only by SD space)
+- [ ] Looper controls: tap record → tap overdub → tap stop, hold to clear
+- [ ] Looper secondary button: stop playback, undo overdub layer
+- [ ] External button wiring: JST header routes to anywhere on guitar body
+- [ ] Footswitch support: 3.5mm mono jack for hands-free pedal control
+- [ ] Looper UI in React web app: waveform display, layer management
 - [ ] MIDI output (3.5mm TRS-A)
+
+**Looper button placement options (user choice, wired to J6):**
+- Near volume/tone knobs — natural for picking hand thumb
+- Upper bout — accessible without moving fretting position
+- Strap button replacement — foot or hand accessible
+- External footswitch via J7 — fully hands-free on stage
 
 ---
 
