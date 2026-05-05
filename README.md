@@ -448,7 +448,27 @@ smartguitar/
 ## Roadmap
 
 ### v1 — Core (this release)
-- [ ] PCB schematic + layout (KiCad)
+
+#### Schematic Progress (KiCad)
+- [x] USB-C connector (HRO TYPE-C-31-M-12, 16P) — VBUS, D+/D−, CC1/CC2
+- [x] TP4056 LiPo charger — PROG 2kΩ (500mA), TEMP pull-up, polyfuse F1
+- [x] DW01A battery protection IC — OVP, UVLO, OCP, short circuit
+- [x] AO4842 dual N-MOSFET protection FETs — back-to-back on B− rail
+- [x] MT3608 boost converter — BATT → +9V, feedback 390kΩ/27kΩ 1%, SS34 diode, CD43 4.7µH inductor
+- [x] TPS60403 charge pump — +9V → −9V, 4× 10µF ceramic caps
+- [x] ESP32-S3-WROOM-1-N16R8 — USB_D+/D− (GPIO19/20), EN pull-up, BOOT button, IO45/IO46 strapping, PSRAM NC flags, UART_TX/RX labels
+- [ ] MCP1700-3302 LDO — BATT → 3.3V digital rail
+- [ ] MCP1700-5002 LDO — +9V → 5V for PCM1808
+- [ ] PCM1808 24-bit ADC — I²S slave, MCLK/BCLK/LRCK from ESP32-S3
+- [ ] NE5532 preamp — ±9V, DIP-8, gain stage + output buffer
+- [ ] MicroSD card socket — SPI, 47Ω damping resistors
+- [ ] SSD1306 OLED 128×64 — I²C
+- [ ] Audio jacks — 1/4" main (bypass switch), 3.5mm mic out
+- [ ] JST-SH expansion header (J6) + 3.5mm footswitch jack (J7) — looper v3
+- [ ] Record button, LEDs, power switch
+- [ ] Star ground — AGND/DGND planes, ferrite beads, pi-filters
+- [ ] Test points — VBAT, +9V, −9V, +5V, 3V3, AGND, DGND, AUDIO_IN, AUDIO_OUT
+- [ ] PCB layout
 - [ ] Firmware: audio capture, SD recording, WiFi AP+STA
 - [ ] Firmware: HTTP server, React UI served from PSRAM
 - [ ] Firmware: WebSocket live status
@@ -457,6 +477,18 @@ smartguitar/
 - [ ] DSP: 4-band EQ, compressor, noise gate
 - [ ] React UI: file manager, in-browser playback, DSP controls
 - [ ] Android app: auto-discovery, ExoPlayer, download
+
+#### Key Design Decisions Made
+- **TP4056 plain + separate DW01A/FS8205A** chosen over integrated ESDP8 — better threshold accuracy (±25mV), faster short circuit response (8µs), lower quiescent current (3µA vs 20µA), independent protection from charger
+- **AO4842 SO-8 dual N-MOSFET** used as FS8205A replacement — 7.7A rated, 30V Vds, pin compatible
+- **ESP32-S3 native USB** (GPIO19/20) eliminates CP2102 entirely — no bridge chip, no auto-reset transistors, simpler BOM
+- **PSRAM (8MB octal)** inside N16R8 module enables full React SPA in RAM, complete DSP effects chain, SD-backed looper
+- **MT3608 + TPS60403** for ±9V split supply — boost then charge pump inversion; pi-filter on +9V output before NE5532
+- **CD43/CD54 SMD power inductor** (4.7µH, 4.3×4.3mm) for boost converter — Coilcraft XAL4040 footprint in KiCad
+- **0603 resistors and capacitors** throughout for hand soldering; 0805 for bulk caps (10µF+); 1206 for polyfuse
+- **USB-C HRO TYPE-C-31-M-12 connector** transplanted from donor TP4056 module — verified footprint match
+- **Battery negative rail** routed through AO4842 back-to-back MOSFETs controlled by DW01A OD/OC pins
+- **ADC charge state inferred** from VBAT voltage divider — no CHRG/STDBY LED pins needed
 
 ### v2 — Effects OTA
 - [ ] DSP: chorus, flanger, tremolo
