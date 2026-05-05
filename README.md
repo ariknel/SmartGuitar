@@ -188,9 +188,10 @@ The ESP32-S3's **LX7 PIE vector extension** accelerates FIR convolution and biqu
 ## Full Feature List
 
 **Audio output:**
-- Line-level 1/4" output — plug into any speaker, hi-fi, PC, or mixer without a guitar amp
-- Preamp bypass switch — raw passive signal for traditional guitar amps
-- Dedicated 3.5mm mic out — always-on line-level secondary output
+- **Passive mode:** guitar pickup → 1/4" output jack directly (raw signal, for traditional guitar amp)
+- **Active mode:** guitar pickup → NE5532 preamp → 1/4" output jack (line level, plug into any speaker/PC/mixer — no amp needed)
+- **Mode switching:** ESP32-S3 GPIO controls two 2N7002 N-channel MOSFETs with RC anti-pop networks — same switching method used by Boss and Ibanez guitar pedals. Inaudible switching, €0.02/each on AliExpress
+- **3.5mm AUX out:** always-on line-level output from NE5532 preamp, works in both modes — connect to PC line-in, powered speakers, or phone via adapter
 
 **Recording:**
 - 24-bit WAV to microSD, up to 96kHz sample rate
@@ -261,8 +262,8 @@ The ESP32-S3's **LX7 PIE vector extension** accelerates FIR convolution and biqu
 | Charger | TP4056 500mA | USB-C |
 | Boost | MT3608 → +9V | NE5532 positive rail |
 | Neg. rail | TPS60403 → −9V | NE5532 negative rail |
-| 5V reg | MCP1700-5002 | PCM1808 VCC |
-| 3.3V reg | MCP1700-3302 | Digital rail |
+| 5V reg | AMS1117-5.0 (SOT-223) | PCM1808 VCC — steps down from +9V; ~40mW waste at 10mA load, negligible |
+| 3.3V reg | MCP1700-3302 (SOT-23) | Digital rail — fed from BATT directly; 178mV dropout, 1.6µA quiescent |
 | Storage | MicroSD SPI | WAV recordings only; UI lives in PSRAM |
 
 Full BOM in [`BOM.md`](./BOM.md).
