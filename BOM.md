@@ -84,8 +84,10 @@ All packages SMD unless noted.
 
 | Ref | Component | Part | Package | Qty | Notes |
 |-----|-----------|------|---------|-----|-------|
-| U7 | 3.3V LDO | MCP1700T-3302E | SOT-23-3 | 1 | ESP32-S3, PCM1808 digital, SD, OLED |
-| C13, C14 | LDO caps | 1µF × 2 | 0402 | 2 | Input + output |
+| U7 | 3.3V LDO | MCP1700T-3302E | SOT-23-3 | 1 | Fed directly from BATT (3.0–4.2V). Only 178mV dropout so regulates correctly down to ~3.5V battery. 1.6µA quiescent current — critical for battery life. ESP32-S3 WiFi draws 200mA+ peaks; feeding from BATT avoids 1W+ heat dissipation that would occur if stepping down from +9V. Cannot use AMS1117-3.3 here — AMS1117 needs 4.6V minimum input (1.3V dropout + 3.3V) which a LiPo cannot provide at any charge state |
+| C14 | LDO input cap | 1µF 0603 | 0603 | 1 | |
+| C15 | LDO output cap | 1µF 0603 | 0603 | 1 | |
+| C16 | LDO bulk output | 10µF 0805 | 0805 | 1 | Handles ESP32-S3 WiFi current transients |
 
 ---
 
@@ -118,7 +120,8 @@ All packages SMD unless noted.
 | U8 | Dual op-amp | NE5532 | SOIC-8 | 1 | Stage 1: voltage gain. Stage 2: output buffer |
 | C20 | Input coupling | 470nF film | 0805 film | 1 | AC couple guitar input; film preferred |
 | R11 | Input load | 1MΩ | 0402 | 1 | High-impedance match for pickup |
-| R12, R13 | Gain resistors | 10kΩ + 100kΩ | 0402 | 2 | ~10× gain; solder jumper for high-output pickups |
+| R_load | Input impedance | 1MΩ | 0603 | 1 | On pin 3 (+) non-inverting input to AGND — sets input impedance only, not gain |
+| R_in | Gain denominator | 5kΩ 1% | 0603 | 1 | On pin 2 (−) to AGND — sets gain denominator. With 50kΩ pot: gain range 1× to 11× |
 | R14 | Output series | 100Ω | 0402 | 1 | Cable drive + anti-pop |
 | C21 | Output coupling | 10µF | 0805 | 1 | AC couple to output jack |
 | C22, C23 | Supply bypass | 100nF × 2 | 0402 | 2 | V+ and V− pins |
