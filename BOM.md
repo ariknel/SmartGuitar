@@ -44,7 +44,7 @@
 | C3 | BAT bypass | 100nF | 0603 | 1 | TP4056 BAT pin decoupling |
 | C4 | BAT bulk | 10µF | 0805 | 1 | TP4056 BAT bulk cap |
 | U2 | Cell protection IC | DW01A | SOT-23-6 | 1 | OVP 4.28V, UVLO 2.5V, OCP, short circuit 8µs, 3µA quiescent |
-| Q1A, Q1B | Protection dual FET | AO4842 | SO-8 | 1 | Dual N-ch MOSFET, 7.7A, back-to-back on battery negative rail |
+| Q1 | Protection dual FET | 8205A (FS8205A) | SOT-23-6 | 1 | Dual N-ch MOSFET, 20V, 6A, back-to-back on battery negative rail. Same IC found on standard TP4056 blue protection modules. Transplant from donor module or buy fresh from LCSC. AliExpress search "8205A SOT23" |
 | R5 | DW01A VCC resistor | 100Ω | 0603 | 1 | Between VBAT and DW01A VCC pin |
 | C1 | DW01A VCC bypass | 100nF | 0603 | 1 | DW01A VCC decoupling |
 | C2 | DW01A CS bypass | 100nF | 0603 | 1 | CS pin bypass cap |
@@ -347,7 +347,7 @@
 | TPS60403 | **SOT-23-5** |
 | MT3608 | **SOT-23-6** |
 | 2N7002 | **SOT-23** |
-| AO4842 | **SO-8** |
+| 8205A (FS8205A) | **SOT-23-6** |
 | DW01A | **SOT-23-6** |
 | X9C503S | **SOIC-8** |
 
